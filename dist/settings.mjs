@@ -4,7 +4,7 @@ const pretty=k=>({arrowleft:'←',arrowright:'→',arrowup:'↑',arrowdown:'↓'
 let binds={...defaults,...JSON.parse(localStorage.getItem('eclipse-binds')||'{}')};
 let open=false,waiting=null;
 const style=document.createElement('style');style.textContent=`
-.command-deck,.instructions,main>.under-arena{display:none!important}
+.command-deck,.instructions{display:none!important}
 #settingsButton{font-size:11px;background:transparent;padding:7px 10px}
 .settings-backdrop{position:fixed;inset:0;background:#050806d9;backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}
 .settings-backdrop.hidden{display:none}
