@@ -4,15 +4,13 @@ Versione salvata: 8
 Contiene codice HTML, CSS e JavaScript, immagini, animazioni, musica generata dal codice e test.
 
 Avvio consigliato su Windows (non serve installare Python):
-1. Estrai lo ZIP.
-2. Entra nella cartella PicchiaDuro-Beta.
+1. Estrai lo ZIP, se stai usando una copia locale.
+2. Entra nella cartella principale del progetto.
 3. Fai doppio clic su Avvia-PicchiaDuro.bat.
-4. Si aprirà automaticamente http://localhost:8000.
+4. Si aprirà automaticamente http://127.0.0.1:8765/.
 
-Il file Avvia-PicchiaDuro.bat usa PowerShell, già incluso in Windows, per
-avviare il server locale.
+Il file Avvia-PicchiaDuro.bat usa PowerShell, già incluso in Windows, per avviare il server locale.
 
-Non aprire direttamente dist/index.html con doppio clic: i moduli JavaScript
-del gioco vengono bloccati dal browser quando la pagina usa il protocollo file://.
+Non aprire direttamente dist/index.html con doppio clic: i moduli JavaScript del gioco vengono bloccati dal browser quando la pagina usa il protocollo file://.
 
 I file originali della versione salvata sono mantenuti senza modifiche.
