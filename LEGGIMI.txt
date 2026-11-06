@@ -1,0 +1,12 @@
+PicchiaDuro-Beta / Eclipse Arena
+Versione salvata: 8
+
+Contiene codice HTML, CSS e JavaScript, immagini, animazioni, musica generata dal codice e test.
+
+Avvio locale con Python installato:
+1. Estrai lo ZIP.
+2. Apri un terminale nella cartella PicchiaDuro-Beta.
+3. Esegui: python -m http.server 8000 --directory dist
+4. Apri http://localhost:8000 nel browser.
+
+I file originali della versione salvata sono mantenuti senza modifiche.
