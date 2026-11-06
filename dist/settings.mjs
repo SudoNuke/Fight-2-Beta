@@ -4,7 +4,7 @@ const pretty=k=>({arrowleft:'←',arrowright:'→',arrowup:'↑',arrowdown:'↓'
 let binds={...defaults,...JSON.parse(localStorage.getItem('eclipse-binds')||'{}')};
 let open=false,waiting=null;
 const style=document.createElement('style');style.textContent=`
-.command-deck,.instructions{display:none!important}
+.command-deck,.instructions{display:none!important}.menu-settings{margin-top:14px;text-align:center}.menu-settings-title{font-size:9px;letter-spacing:3px;color:#c79c67;margin-bottom:7px}.menu-settings-links{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.menu-settings-links button,.menu-settings-links a{font-size:10px;padding:7px 10px;background:transparent;border:1px solid #4b4c43;border-radius:4px;color:#d5bc91}.menu-settings-links button:hover,.menu-settings-links a:hover{border-color:#e4b372;background:#34382e}.settings-audio{display:flex;align-items:center;gap:12px;margin-top:16px;border:1px solid #3b4939;border-radius:7px;padding:12px;font-size:12px;color:#d9ddce}.settings-audio input{flex:1;accent-color:#dfb171}.settings-audio output{width:38px;color:#d4bb8e}
 #settingsButton{font-size:11px;background:transparent;padding:7px 10px}
 .settings-backdrop{position:fixed;inset:0;background:#050806d9;backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:18px}
 .settings-backdrop.hidden{display:none}
@@ -23,19 +23,21 @@ function save(){localStorage.setItem('eclipse-binds',JSON.stringify(binds))}
 function render(){document.querySelectorAll('.bind-row button').forEach(b=>{const k=b.dataset.bind;b.textContent=waiting===k?'PREMI UN TASTO':pretty(binds[k]);b.classList.toggle('waiting',waiting===k)})}
 function row(k){const d=document.createElement('div');d.className='bind-row';d.innerHTML='<span>'+labels[k]+'</span><button data-bind="'+k+'">'+pretty(binds[k])+'</button>';return d}
 function makeSettings(){
- const b=document.createElement('button');b.id='settingsButton';b.textContent='⚙ Impostazioni';b.setAttribute('aria-label','Apri impostazioni comandi');document.querySelector('.top-actions').prepend(b);
+ const menu=document.createElement('div');menu.className='menu-settings';menu.innerHTML='<div class="menu-settings-title">SETTINGS →</div><div class="menu-settings-links"><button id="openController">Controller</button><button id="openAudio">Audio volume</button><a href="prova.html">Studio movimenti</a></div>';document.querySelector('#start').insertAdjacentElement('afterend',menu);
  const back=document.createElement('div');back.className='settings-backdrop hidden';back.id='settingsBackdrop';
- back.innerHTML='<div class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="settings-head"><div><h2 id="settingsTitle">Impostazioni</h2><p>Personalizza i tasti dei due giocatori.</p></div><button class="settings-close" id="settingsClose">×</button></div><div class="settings-grid"><section class="settings-group"><h3>GIOCATORE 1</h3><div id="binds1"></div></section><section class="settings-group"><h3>GIOCATORE 2</h3><div id="binds2"></div></section></div><div class="settings-foot"><span>Le impostazioni vengono salvate automaticamente.</span><button id="resetBinds">Ripristina predefiniti</button></div></div>';
+ back.innerHTML='<div class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="settings-head"><div><h2 id="settingsTitle">Impostazioni</h2><p>Personalizza comandi, audio e allenamento.</p></div><button class="settings-close" id="settingsClose">×</button></div><div class="settings-grid"><section class="settings-group"><h3>CONTROLLER · GIOCATORE 1</h3><div id="binds1"></div></section><section class="settings-group"><h3>CONTROLLER · GIOCATORE 2</h3><div id="binds2"></div></section></div><div class="settings-audio"><label for="settingsVolume">Audio volume</label><input id="settingsVolume" type="range" min="0" max="100" value="35"><output id="settingsVolumeValue">35%</output></div><div class="settings-foot"><a href="prova.html">Apri Studio movimenti ↗</a><button id="resetBinds">Ripristina comandi</button></div></div>';
  document.body.append(back);
  ['p1left','p1right','p1jump','p1dodge','p1block','p1punch','p1kick'].forEach(k=>back.querySelector('#binds1').append(row(k)));
  ['p2left','p2right','p2jump','p2dodge','p2block','p2punch','p2kick'].forEach(k=>back.querySelector('#binds2').append(row(k)));
  const close=()=>{open=false;waiting=null;back.classList.add('hidden');render()};
- b.onclick=()=>{open=true;back.classList.remove('hidden');render()};
+ const show=()=>{open=true;back.classList.remove('hidden');render()};
+ menu.querySelector('#openController').onclick=show;
+ menu.querySelector('#openAudio').onclick=()=>{show();back.querySelector('#settingsVolume').focus()};
  back.querySelector('#settingsClose').onclick=close;back.onclick=e=>{if(e.target===back)close()};
  back.querySelector('#resetBinds').onclick=()=>{binds={...defaults};save();render()};
+ back.querySelector('#settingsVolume').oninput=e=>{const v=e.target.value;back.querySelector('#settingsVolumeValue').textContent=v+'%';const main=document.querySelector('#musicVolume');if(main){main.value=v;main.dispatchEvent(new Event('input',{bubbles:true}))}};
  back.addEventListener('click',e=>{const btn=e.target.closest('[data-bind]');if(btn){waiting=btn.dataset.bind;render()}});
-}
-const reverse=()=>Object.fromEntries(Object.entries(binds).map(([k,v])=>[v,k]));
+}const reverse=()=>Object.fromEntries(Object.entries(binds).map(([k,v])=>[v,k]));
 function synthetic(type,key,e){window.dispatchEvent(new KeyboardEvent(type,{key:key===' ' ? ' ':key,code:e.code,bubbles:true,cancelable:true}))}
 window.addEventListener('keydown',e=>{
  if(waiting){if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;e.preventDefault();e.stopImmediatePropagation();binds[waiting]=keyName(e);save();waiting=null;render();return}
