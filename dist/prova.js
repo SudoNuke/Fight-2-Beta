@@ -32,7 +32,7 @@ window.addEventListener('keydown',e=>{if(['INPUT','SELECT'].includes(e.target.ta
 reset();
 const loads=[];
 for(const type of ['punch','dodge','jump','block','study']){images[type]=[[],[]];for(let r=0;r<2;r++)for(let n=0;n<6;n++)loads.push(new Promise((resolve,reject)=>{const im=new Image;im.onload=()=>{images[type][r][n]=im;resolve()};im.onerror=reject;im.src=`assets-alpha/${type}/${r}-${n}.png`}))}
-Promise.all(loads).then(()=>{ready=true;timeline();$('loading').style.display='none'}).catch(()=>{$('loading').textContent='Impossibile caricare le immagini. Ricarica la pagina.'});
+Promise.all(loads).then(()=>{ready=true;timeline();renderCombo();$('loading').style.display='none'}).catch(()=>{$('loading').textContent='Impossibile caricare le immagini. Ricarica la pagina.'});
 function tick(ms){let dt=Math.min((ms-last)/1000,.04);last=ms;step(dt);draw();requestAnimationFrame(tick)}requestAnimationFrame(tick);
 
 $('comboPlay')?.addEventListener('click',playCombo);$('comboStop')?.addEventListener('click',stopCombo);$('comboFighter')?.addEventListener('change',()=>renderCombo());
