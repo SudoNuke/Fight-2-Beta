@@ -16,7 +16,7 @@ export class Fight{
  this.fighters.forEach((f,i)=>{const b=this.fighters[1-i],input=controls[i];f.dir=b.x>f.x?1:-1;f.energy=Math.min(100,f.energy+dt*10);f.stun=Math.max(0,f.stun-dt);f.cooldown=Math.max(0,f.cooldown-dt);if(f.action==='idle'&&input.block)this.action(i,'block');let moving=Number(input.move)||0;if(f.stun===0&&((f.action==='idle'&&!input.block)||f.action==='jump')){f.x+=moving*(f.action==='jump'?130:220)*dt;f.walk=moving?f.walk+dt:0}else f.walk=0;
  if(f.action==='dash'&&f.stun===0)f.x+=f.dashDir*780*dt;
  if(f.action!=='idle'){f.t+=dt;f.frame=frameAt(f.action,f.t);if(f.action==='block'&&input.block&&f.frame>=3&&f.energy>0){f.t=.20;f.frame=3}if(f.action==='dodge'&&f.frame===3)f.x-=f.dir*95*dt;if(f.t>=TOTAL[f.action]){const prev=f.action;f.action='idle';f.t=0;f.frame=0;f.cooldown=prev==='dodge'?.22:prev==='dash'?.18:.06}}f.x=Math.max(MIN_X,Math.min(MAX_X,f.x))});
- let[a,b]=this.fighters;const gap=b.x-a.x;if(Math.abs(gap)<158){let mid=Math.max(MIN_X+79,Math.min(MAX_X-79,(a.x+b.x)/2)),dir=gap>=0?1:-1;a.x=mid-dir*79;b.x=mid+dir*79}
+ // I combattenti possono attraversarsi: nessun blocco rigido tra i due.
  // Resolve both active strikes before checking KO, allowing a simultaneous draw.
  const strikes=this.fighters.map((f,i)=>({id:i,active:['punch','kick'].includes(f.action)&&f.frame>=3&&!f.hit,inRange:Math.abs(f.x-this.fighters[1-i].x)<=(f.action==='kick'?245:210)}));for(const strike of strikes){if(strike.active){this.fighters[strike.id].hit=true;if(strike.inRange)this.hit(strike.id,1-strike.id,true)}}
  const dead=this.fighters.map(f=>f.hp<=0);if(dead[0]||dead[1])this.endRound(dead[0]&&dead[1]?null:dead[0]?1:0);else if(this.timer===0)this.endRound(a.hp===b.hp?null:a.hp>b.hp?0:1)}
