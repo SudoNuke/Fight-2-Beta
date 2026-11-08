@@ -1,5 +1,5 @@
-const defaults={p1left:'a',p1right:'d',p1jump:'w',p1dodge:'q',p1block:'s',p1punch:'u',p1kick:'i',p2left:'arrowleft',p2right:'arrowright',p2jump:'arrowup',p2dodge:'l',p2block:'arrowdown',p2punch:'j',p2kick:'k'};
-const labels={p1left:'Sinistra',p1right:'Destra',p1jump:'Salto',p1dodge:'Schivata',p1block:'Parata',p1punch:'Pugno',p1kick:'Calcio',p2left:'Sinistra',p2right:'Destra',p2jump:'Salto',p2dodge:'Schivata',p2block:'Parata',p2punch:'Pugno',p2kick:'Calcio'};
+const defaults={p1left:'a',p1right:'d',p1jump:'w',p1dodge:'q',p1block:'s',p1punch:'u',p1kick:'i',p1special:'o',p2left:'arrowleft',p2right:'arrowright',p2jump:'arrowup',p2dodge:'l',p2block:'arrowdown',p2punch:'j',p2kick:'k',p2special:'m'};
+const labels={p1left:'Sinistra',p1right:'Destra',p1jump:'Salto',p1dodge:'Schivata',p1block:'Parata',p1punch:'Pugno',p1kick:'Calcio',p1special:'Abilità speciale',p2left:'Sinistra',p2right:'Destra',p2jump:'Salto',p2dodge:'Schivata',p2block:'Parata',p2punch:'Pugno',p2kick:'Calcio',p2special:'Abilità speciale'};
 const pretty=k=>({arrowleft:'←',arrowright:'→',arrowup:'↑',arrowdown:'↓', ' ':'SPAZIO'}[k]||k.toUpperCase());
 let binds={...defaults,...JSON.parse(localStorage.getItem('eclipse-binds')||'{}')};
 let open=false,waiting=null;
@@ -29,8 +29,8 @@ function makeSettings(){
  const back=document.createElement('div');back.className='settings-backdrop hidden';back.id='settingsBackdrop';
  back.innerHTML='<div class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="settings-head"><div><h2 id="settingsTitle">Impostazioni</h2><p>Personalizza comandi, audio e allenamento.</p></div><button class="settings-close" id="settingsClose">×</button></div><div class="settings-grid"><section class="settings-group"><h3>CONTROLLER · GIOCATORE 1</h3><div id="binds1"></div></section><section class="settings-group"><h3>CONTROLLER · GIOCATORE 2</h3><div id="binds2"></div></section></div><div class="settings-audio"><label for="settingsVolume">Audio volume</label><input id="settingsVolume" type="range" min="0" max="100" value="35"><output id="settingsVolumeValue">35%</output></div><div class="settings-foot"><a href="prova.html">Apri Studio movimenti ↗</a><button id="resetBinds">Ripristina comandi</button></div></div>';
  document.body.append(back);
- ['p1left','p1right','p1jump','p1dodge','p1block','p1punch','p1kick'].forEach(k=>back.querySelector('#binds1').append(row(k)));
- ['p2left','p2right','p2jump','p2dodge','p2block','p2punch','p2kick'].forEach(k=>back.querySelector('#binds2').append(row(k)));
+ ['p1left','p1right','p1jump','p1dodge','p1block','p1punch','p1kick','p1special'].forEach(k=>back.querySelector('#binds1').append(row(k)));
+ ['p2left','p2right','p2jump','p2dodge','p2block','p2punch','p2kick','p2special'].forEach(k=>back.querySelector('#binds2').append(row(k)));
  const close=()=>{open=false;waiting=null;back.classList.add('hidden');render()};
  const show=()=>{open=true;back.classList.remove('hidden');render()};
  menu.querySelector('#openController').onclick=show;
